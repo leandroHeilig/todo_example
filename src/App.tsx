@@ -24,8 +24,8 @@ function App() {
           />
         </div>
         <div>
-          <h2>Tarefas</h2>
-          <TaskList />
+          <h2>Suas tarefas</h2>
+          <TaskList taskList={taskList} />
         </div>
       </main>
       <Footer />
