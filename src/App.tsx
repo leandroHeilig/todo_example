@@ -1,16 +1,18 @@
 import React, { useState } from "react";
+
 import Footer from "./components/Footer";
 import Header from "./components/Header";
-
-import styles from "./App.module.css";
 import TaskForm from "./components/TaskForm";
 import TaskList from "./components/TaskList";
+import Modal from "./components/Modal";
 
 import { ITask } from "./interfaces/Task";
-import Modal from "./components/Modal";
+
+import styles from "./App.module.css";
 
 function App() {
   const [taskList, setTaskList] = useState<ITask[]>([]);
+  const [taskToUpdate, setTaskToUpdate] = useState<ITask | null>(null);
 
   const deleteTask = (id: number) => {
     // incluir checagem do banco
@@ -32,13 +34,20 @@ function App() {
     }
   };
 
-  const editTask = (): void => {
+  const editTask = (task: ITask): void => {
     hideOrShowModal(true);
+    setTaskToUpdate(task);
   };
   return (
     <div>
       <Modal
-        children={<TaskForm btnText="Editar Tarefas" taskList={taskList} />}
+        children={
+          <TaskForm
+            btnText="Editar Tarefas"
+            taskList={taskList}
+            task={taskToUpdate}
+          />
+        }
       />
       <Header />
       <main className={styles.main}>

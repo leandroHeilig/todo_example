@@ -8,12 +8,21 @@ interface Props {
   btnText: string;
   taskList: ITask[];
   setTaskList?: React.Dispatch<React.SetStateAction<ITask[]>>;
+  task?: ITask | null;
 }
 
-const TaskForm = ({ btnText, taskList, setTaskList }: Props) => {
+const TaskForm = ({ btnText, taskList, setTaskList, task }: Props) => {
   const [id, setId] = useState<number>(0);
   const [title, setTitle] = useState<string>("");
   const [priority, setPriority] = useState<number>(0);
+
+  useEffect(() => {
+    if (task) {
+      setId(task.id);
+      setTitle(task.title);
+      setPriority(task.priority);
+    }
+  }, [task]);
 
   const addTaskHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -52,9 +61,9 @@ const TaskForm = ({ btnText, taskList, setTaskList }: Props) => {
       <div className={styles.input_container}>
         <label htmlFor="priority">Prioridade da Tarefa:</label>
         <input
-          type="text"
+          type="number"
           name="priority"
-          placeholder="Prioridade da tarefa"
+          placeholder="Prioridade da tarefa (1 a 5)"
           onChange={handleChange}
           value={priority}
         />
