@@ -9,9 +9,16 @@ interface Props {
   taskList: ITask[];
   setTaskList?: React.Dispatch<React.SetStateAction<ITask[]>>;
   task?: ITask | null;
+  handleUpdate?(id: number, title: string, priority: number): void;
 }
 
-const TaskForm = ({ btnText, taskList, setTaskList, task }: Props) => {
+const TaskForm = ({
+  btnText,
+  taskList,
+  setTaskList,
+  task,
+  handleUpdate,
+}: Props) => {
   const [id, setId] = useState<number>(0);
   const [title, setTitle] = useState<string>("");
   const [priority, setPriority] = useState<number>(0);
@@ -26,14 +33,17 @@ const TaskForm = ({ btnText, taskList, setTaskList, task }: Props) => {
 
   const addTaskHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const id = Math.floor(Math.random() * 1000);
-    const newTask: ITask = { id, title, priority };
-    setTaskList!([...taskList, newTask]);
 
-    setTitle("");
-    setPriority(0);
+    if (handleUpdate) {
+      handleUpdate(id, title, priority);
+    } else {
+      const id = Math.floor(Math.random() * 1000);
+      const newTask: ITask = { id, title, priority };
+      setTaskList!([...taskList, newTask]);
 
-    console.log(taskList);
+      setTitle("");
+      setPriority(0);
+    }
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {

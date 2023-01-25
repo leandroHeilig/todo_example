@@ -14,7 +14,7 @@ function App() {
   const [taskList, setTaskList] = useState<ITask[]>([]);
   const [taskToUpdate, setTaskToUpdate] = useState<ITask | null>(null);
 
-  const deleteTask = (id: number) => {
+  const deleteTask = (id: number): void => {
     // incluir checagem do banco
     setTaskList(
       taskList.filter((task) => {
@@ -24,7 +24,7 @@ function App() {
   };
 
   const hideOrShowModal = (display: boolean) => {
-    const modal = document.querySelector("#modal");
+    const modal = document.getElementById("modal");
     if (display) {
       //Exibe
       modal!.classList.remove("hide");
@@ -38,14 +38,29 @@ function App() {
     hideOrShowModal(true);
     setTaskToUpdate(task);
   };
+
+  const updateTask = (id: number, title: string, priority: number) => {
+    const updatedTask: ITask = { id, title, priority };
+
+    const updatedItems = taskList.map((task) => {
+      return task.id === updatedTask.id ? updatedTask : task;
+    });
+
+    setTaskList(updatedItems);
+
+    hideOrShowModal(false);
+  };
+
   return (
     <div>
       <Modal
+        title="Editar Tarefa"
         children={
           <TaskForm
-            btnText="Editar Tarefas"
+            btnText="Editar"
             taskList={taskList}
             task={taskToUpdate}
+            handleUpdate={updateTask}
           />
         }
       />
